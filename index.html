@@ -1,25 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/bootstrap-icons.css">
     <style>
-        audio{
+        body {
+            background-image: url('./img/原神大家庭.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100vh;
+
+        }
+
+        audio {
             width: 20px;
             height: 20px;
+            display: none;
         }
+
+        .wrapper {
+            width: 1200px;
+
+            margin: 0 auto;
+        }
+
+        .kuang {
+            border-radius: 20px;
+            height: 800px;
+            margin-bottom: 50px;
+            backdrop-filter: saturate();
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: saturate(180%) blur(20px);
+            box-shadow: 5px 0 5px rgba(0, 0, 0, .3);
+            overflow: hidden;
+            padding-left: 118px;
+        }
+
+        button.go {
+            background-color: rgba(30, 30, 31, 0.3) !important;
+            color: #fff;
+        }
+
+        .list {
+            position: absolute;
+            left: 240px;
+        }
+
+        .list img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-top: 50px;
+            cursor: pointer;
+        }
+
+        .active {
+            box-shadow: 10px 10px 8px rgba(0, 0, 0, .5)
+        }
+
+        .content {
+            padding-right:200px;
+            width: 1100px;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            margin-top: 50px;
+
+        }
+
+        .left img,
+        .right img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+
+            cursor: pointer;
+
+        }
+
+        .left span {
+            position: relative;
+            margin-left: 20px;
+            background-color: rgba(0, 0, 0, .3);
+            height: 65px;
+            line-height: 45px;
+            padding: 10px;
+            border-radius: 15px;
+
+
+
+        }
+
+        .left span::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: -20px;
+            width: 0;
+            height: 0;
+            border: 10px rgba(0, 0, 0, .3) solid;
+            border-bottom: transparent 10px solid;
+            border-left: transparent 10px solid;
+            border-top: transparent 10px solid;
+
+        }
+
+        .right {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-top: 50px;
+            /* margin-left: 1000px; */
+        }
+
+
+        .right span {
+            position: relative;
+            margin-left: 20px;
+            background-color: rgba(0, 0, 0, .3);
+            height: 65px;
+            line-height: 45px;
+            padding: 10px;
+            border-radius: 15px;
+            margin-right: 20px;
+
+
+        }
+
+        .right span::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: -20px;
+            width: 0;
+            height: 0;
+            border: 10px rgba(0, 0, 0, .3) solid;
+            border-bottom: transparent 10px solid;
+            border-right: transparent 10px solid;
+            border-top: transparent 10px solid;
+        }
+
+
+
+
+
     </style>
 </head>
+
 <body>
-    <audio controls src=""></audio>
-    <form action="">
-        <input id="test" type="text" >
-        <button type="button">获取</button>
-    </form>
-    <ul id="info">
-    </ul>
+
+
+    <div id="app">
+
+
+        <div class="list">
+            <div>
+                <img class="active" @click="xuan('派蒙',$event)" src="./img/派蒙.webp">
+            </div>
+            <div>
+                <img @click="xuan('八重神子',$event)" src="./img/八重神子.webp">
+            </div>
+            <div>
+                <img @click="xuan('刻晴',$event)" src="./img/刻晴.webp">
+            </div>
+            <div>
+                <img @click="xuan('枫原万叶',$event)" src="./img/枫原万叶.webp">
+            </div>
+            <div>
+                <img @click="xuan('神里绫华',$event)" src="./img/神里凌华.webp">
+            </div>
+            <div>
+                <img @click="xuan('钟离',$event)" src="./img/钟离.webp">
+            </div>
+        </div>
+
+        <div class="kuang wrapper">
+            <div class="content">
+
+            </div>
+        </div>
+
+        <div>
+            <audio controls src=""></audio>
+            <div class="wrapper input-group mb-3">
+                <input v-model="msg" @keyup.enter="getmis" type="text" id="test" class="form-control"
+                    placeholder="发送消息吧" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button @click.prevent="getmis" class="btn go btn-outline-secondary" type="button"
+                    id="button-addon2">发送</button>
+            </div>
+            <ul id="info">
+        </div>
+    </div>
     <script src="./axios.js"></script>
     <script src="./index.js"></script>
+    <script src="./bootstrap/bootstrap.min.js"></script>
+    <script src="./vue.js"></script>
+
+    <script>
+        const vue = new Vue({
+            el: '#app',
+            data: {
+                user: '派蒙',
+                msg: '',
+                img: './img/派蒙.webp',
+                list: []
+            },
+            methods: {
+
+                async getmis() {
+                    let temp = this.msg
+                    let divone = document.createElement('div')
+                    divone.className = 'right'
+                    let div = document.createElement('div')
+                    div.className = 'left'
+                    divone.innerHTML = `
+                    <img src="./img/主角.webp" alt="">
+                    <span>${temp}</span>
+                    `
+                    
+
+                    document.querySelector('.content').appendChild(divone)
+                    div.innerHTML = `
+                    <img src=${this.img} alt="">
+                    <span>...</span>
+                    `
+                    document.querySelector('.content').appendChild(div)
+                    this.msg = ''
+                    
+                    const a = await axios.get("https://api.lolimi.cn/API/AI/bj.php", { params: { msg: temp } })
+                    const b = await axios.get("https://api.lolimi.cn/API/yyhc/y.php", { params: { msg: a.data.data.output, speaker: this.user, noisew: "0.5", sdp: "2", Length: "1", noise: "0.6", type: "1" } })
+                    // data.msg
+                    audio.src = b.data.music
+
+                    console.log(div);
+                    div.innerHTML = `
+                    <img src=${this.img} alt="">
+                    <span>${b.data.msg}</span>
+                    `
+                    document.querySelector('.content').appendChild(div)
+                    audio.play()
+                    // info.insertAdjacentHTML("beforeend", `<li>${a.data.data.output}</li>`)
+                },
+                xuan(value, e) {
+                    document.querySelector('.active').classList.remove('active')
+                    e.target.classList.add('active')
+                    this.user = value
+                    this.img = e.target.currentSrc
+                }
+            }
+        })
+    </script>
+
+
+
+
+
+
 </body>
+
 </html>
