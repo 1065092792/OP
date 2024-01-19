@@ -29,6 +29,7 @@
         }
 
         .kuang {
+            position: relative;
             border-radius: 20px;
             height: 800px;
             margin-bottom: 50px;
@@ -47,7 +48,7 @@
 
         .list {
             position: absolute;
-            left: 240px;
+            left: 156px;
         }
 
         .list img {
@@ -63,11 +64,12 @@
         }
 
         .content {
-            padding-right:200px;
+            padding-right: 150px;
             width: 1100px;
             height: 100%;
             overflow-y: auto;
             overflow-x: hidden;
+            padding-bottom: 30px;
 
         }
 
@@ -148,11 +150,6 @@
             border-right: transparent 10px solid;
             border-top: transparent 10px solid;
         }
-
-
-
-
-
     </style>
 </head>
 
@@ -184,6 +181,7 @@
         </div>
 
         <div class="kuang wrapper">
+
             <div class="content">
 
             </div>
@@ -200,10 +198,10 @@
             <ul id="info">
         </div>
     </div>
-    <script src="./axios.js"></script>
-    <script src="./index.js"></script>
+    <script src="./lib/axios.js"></script>
+    <script src="./lib/index.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="./vue.js"></script>
+    <script src="./lib/vue.js"></script>
 
     <script>
         const vue = new Vue({
@@ -226,16 +224,18 @@
                     <img src="./img/主角.webp" alt="">
                     <span>${temp}</span>
                     `
-                    
 
-                    document.querySelector('.content').appendChild(divone)
+                    const cont = document.querySelector('.content')
+                    cont.appendChild(divone)
+                    cont.scrollTop =  cont.scrollHeight
                     div.innerHTML = `
                     <img src=${this.img} alt="">
                     <span>...</span>
                     `
                     document.querySelector('.content').appendChild(div)
+                    cont.scrollTop =  cont.scrollHeight
                     this.msg = ''
-                    
+
                     const a = await axios.get("https://api.lolimi.cn/API/AI/bj.php", { params: { msg: temp } })
                     const b = await axios.get("https://api.lolimi.cn/API/yyhc/y.php", { params: { msg: a.data.data.output, speaker: this.user, noisew: "0.5", sdp: "2", Length: "1", noise: "0.6", type: "1" } })
                     // data.msg
@@ -247,6 +247,7 @@
                     <span>${b.data.msg}</span>
                     `
                     document.querySelector('.content').appendChild(div)
+                    cont.scrollTop =  cont.scrollHeight
                     audio.play()
                     // info.insertAdjacentHTML("beforeend", `<li>${a.data.data.output}</li>`)
                 },
