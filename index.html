@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <title>原神启动！！</title>
+    
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/bootstrap-icons.css">
+    
     <style>
         body {
-            background-image: url('./img/原神大家庭.webp');
+            background-image: url('./img/派蒙背景图.webp');
             background-size: cover;
             background-repeat: no-repeat;
             height: 100vh;
@@ -29,7 +32,7 @@
         }
 
         .kuang {
-            position: relative;
+
             border-radius: 20px;
             height: 800px;
             margin-bottom: 50px;
@@ -48,7 +51,7 @@
 
         .list {
             position: absolute;
-            left: 156px;
+            left: -156px;
         }
 
         .list img {
@@ -57,6 +60,7 @@
             border-radius: 50%;
             margin-top: 50px;
             cursor: pointer;
+
         }
 
         .active {
@@ -149,6 +153,10 @@
             border-right: transparent 10px solid;
             border-top: transparent 10px solid;
         }
+
+        .box {
+            position: relative;
+        }
     </style>
 </head>
 
@@ -157,36 +165,39 @@
 
     <div id="app">
 
+        <div class=" box wrapper">
 
-        <div class="list">
-            <div>
-                <img class="active" @click="xuan('派蒙',$event)" src="./img/派蒙.webp">
-            </div>
-            <div>
-                <img @click="xuan('八重神子',$event)" src="./img/八重神子.webp">
-            </div>
-            <div>
-                <img @click="xuan('刻晴',$event)" src="./img/刻晴.webp">
-            </div>
-            <div>
-                <img @click="xuan('枫原万叶',$event)" src="./img/枫原万叶.webp">
-            </div>
-            <div>
-                <img @click="xuan('神里绫华',$event)" src="./img/神里凌华.webp">
-            </div>
-            <div>
-                <img @click="xuan('钟离',$event)" src="./img/钟离.webp">
-            </div>
-        </div>
 
-        <div class="kuang wrapper">
-
-            <div class="content">
-
+            <div class="list">
+                <div>
+                    <img class="active" @click="xuan('派蒙',$event)" src="./img/派蒙.webp">
+                </div>
+                <div>
+                    <img @click="xuan('八重神子',$event)" src="./img/八重神子.webp">
+                </div>
+                <div>
+                    <img @click="xuan('刻晴',$event)" src="./img/刻晴.webp">
+                </div>
+                <div>
+                    <img @click="xuan('枫原万叶',$event)" src="./img/枫原万叶.webp">
+                </div>
+                <div>
+                    <img @click="xuan('神里绫华',$event)" src="./img/神里凌华.webp">
+                </div>
+                <div>
+                    <img @click="xuan('钟离',$event)" src="./img/钟离.webp">
+                </div>
             </div>
-        </div>
 
-        <div>
+            <div class="kuang wrapper">
+
+                <div class="content">
+
+                </div>
+            </div>
+
+            <div>
+            </div>
             <audio controls src=""></audio>
             <div class="wrapper input-group mb-3">
                 <input v-model="msg" @keyup.enter="getmis" type="text" id="test" class="form-control"
@@ -201,6 +212,7 @@
     <script src="./lib/index.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
     <script src="./lib/vue.js"></script>
+    <script src="./lib/lodash.min.js"></script>
 
     <script>
         const vue = new Vue({
@@ -209,52 +221,84 @@
                 user: '派蒙',
                 msg: '',
                 img: './img/派蒙.webp',
-                list: []
+                timer: '',
+                list: {'神里绫华':'./img/神里背景图.png','派蒙':'./img/派蒙背景图.webp','八重神子':'./img/八重神子背景图.jpg','枫原万叶':'./img/枫原万叶背景图.jpg','钟离':'./img/钟离背景图.jpg','刻晴':'./img/刻晴背景图.webp'}
+                
             },
             methods: {
 
-                async getmis() {
-                    let temp = this.msg
+                getmis() {
+                    //写一个2秒的防抖
+                    if(this.msg === ''){
+                        return
+                    }
+                    const cont = document.querySelector('.content')
                     let divone = document.createElement('div')
                     divone.className = 'right'
-                    let div = document.createElement('div')
-                    div.className = 'left'
+                    let temp = this.msg
+                    this.msg = ''
                     divone.innerHTML = `
                     <img src="./img/主角.webp" alt="">
                     <span>${temp}</span>
                     `
+                    document.querySelector('.content').appendChild(divone)
+                    cont.scrollTop = cont.scrollHeight
 
-                    const cont = document.querySelector('.content')
-                    cont.appendChild(divone)
-                    cont.scrollTop =  cont.scrollHeight
-                    div.innerHTML = `
+                    if (this.timer) {
+                        clearTimeout(this.timer)
+                    }
+
+                    this.timer = setTimeout(async () => {
+
+
+
+                        let div = document.createElement('div')
+                        div.className = 'left'
+
+
+                        
+                        cont.appendChild(divone)
+                        cont.scrollTop = cont.scrollHeight
+                        div.innerHTML = `
                     <img src=${this.img} alt="">
                     <span>...</span>
                     `
-                    document.querySelector('.content').appendChild(div)
-                    cont.scrollTop =  cont.scrollHeight
-                    this.msg = ''
+                        document.querySelector('.content').appendChild(div)
+                        cont.scrollTop = cont.scrollHeight
+                        this.msg = ''
 
-                    const a = await axios.get("https://api.lolimi.cn/API/AI/bj.php", { params: { msg: temp } })
-                    const b = await axios.get("https://api.lolimi.cn/API/yyhc/y.php", { params: { msg: a.data.data.output, speaker: this.user, noisew: "0.5", sdp: "2", Length: "1", noise: "0.6", type: "1" } })
-                    // data.msg
-                    audio.src = b.data.music
+                        const a = await axios.get("https://api.lolimi.cn/API/AI/bj.php", { params: { msg: temp } })
+                        let animMsg = a.data.data.output
+                        const reg = /（.*?）/g;
+                        animMsg = animMsg.replace(reg, '')
+                        console.log(animMsg);
+                        const b = await axios.get("https://api.lolimi.cn/API/yyhc/y.php", { params: { msg: animMsg, speaker: this.user, noisew: "0.5", sdp: "1", Length: "1", noise: "0.6", type: "1" } })
+                        // data.msg
 
-                    console.log(div);
-                    div.innerHTML = `
+                        audio.src = b.data.music
+
+                        console.log(div);
+                        div.innerHTML = `
                     <img src=${this.img} alt="">
                     <span>${b.data.msg}</span>
                     `
-                    document.querySelector('.content').appendChild(div)
-                    cont.scrollTop =  cont.scrollHeight
-                    audio.play()
-                    // info.insertAdjacentHTML("beforeend", `<li>${a.data.data.output}</li>`)
+                        document.querySelector('.content').appendChild(div)
+                        cont.scrollTop = cont.scrollHeight
+                        audio.play()
+
+                        // info.insertAdjacentHTML("beforeend", `<li>${a.data.data.output}</li>`)
+                    }, 1500)
+
+
+
                 },
                 xuan(value, e) {
                     document.querySelector('.active').classList.remove('active')
                     e.target.classList.add('active')
                     this.user = value
                     this.img = e.target.currentSrc
+                    console.log(this.list[value]);
+                    document.body.style.backgroundImage = `url(${this.list[value]})`
                 }
             }
         })

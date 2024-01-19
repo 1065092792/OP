@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //括号外的字符要保留，所有括号里的内容都要清除 
+        const reg = /（.*?）/g;
+       
+        const str = "（惊恐）你要做什么？为什么要伤害我？（哭泣）"
+        console.log(str.replace(reg, ''));
+
+    </script>
+</body>
+</html>
